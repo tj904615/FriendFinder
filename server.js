@@ -1,51 +1,25 @@
-var config = {
-    ".chosen-select": {},
-    ".chosen-select-deselect": {
-        allow_single_deselect: true
-    },
-    ".chosen-select-no-single": {
-        disable_search_threshold: 10
-    },
-    ".chosen-select-no-results": {
-        no_results_text: "Nothing found!"
-    },
-    ".chosen-select-width": {
-        width: "95%"
-    }
-};
+// DEPENDENCIES
+var express = require("express");
+var path = require("path");
+var nodemon = require("nodemon");
+
+// SETS UP EXPRESS
+var app = express();
+var PORT = process.env.PORT || 8080;
+
+// EXPRESS DATA PARSING CAPABILITIES
+app.use(express.static('app/public'));
+app.use(express.urlencoded({
+    extended: true
+}));
+app.use(express.json());
+
+// ROUTER
+require("./app/routing/apiRoutes")(app);
+require("./app/routing/htmlRoutes")(app);
 
 
-$("#submit").on("click", (event) => {
-    event.preventDefault();
-
-   
-    var userData = {
-        name: $("#name").val(),
-        
-        scores: [
-            $("#q1").val(),
-            $("#q2").val(),
-            $("#q3").val(),
-            $("#q4").val(),
-            $("#q5").val(),
-            $("#q6").val(),
-            $("#q7").val(),
-            $("#q8").val(),
-            $("#q9").val(),
-            $("#q10").val()
-        ]
-    };
-
-    
-    $.post("/api/friends", userData, (data) => {
-
-        
-        $("#match-name").text(data.name);
-       
-
-        
-        $("#results-modal").modal("toggle");
-
-    });
-
+// LISTENER
+app.listen(PORT, function () {
+    console.log("App listening on PORT: " + PORT);
 });
